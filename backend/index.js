@@ -10,9 +10,6 @@ init();
 
  app.get('/todo' , async (req,res)=>{
    const itemLists = await storage.getItem("todolist");
-      itemLists.forEach((itemList)=>{
-        return itemList.todo
-      })
 
     // res.status(200).json(await storage.values(itemLists))
     res.status(200).json({ result: itemLists });
@@ -27,6 +24,11 @@ init();
     res.status(200).json({ success: true });
   
    });
+
+   app.delete("/todo", async(req,res)=>{
+     const deleteitem=await storage.setItem("todolist", []);
+     res.status(200).json({ result: deleteitem });
+   })
    
    
 
