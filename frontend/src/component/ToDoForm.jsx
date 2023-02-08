@@ -18,38 +18,44 @@ const ToDoForm = () => {
             body:JSON.stringify({
               todo:todo
             })
-        
           }).then((response)=>{
             alert("sucessfull insert")
             console.log(response)
-            
-            setItemlist((itemList)=>[
-              ...itemList,
-              {todo:todo}
-              ]);
-              setTodo("")  
+            setTodo("")  
+            getTodos()
            })
           
       }catch(err){
   console.log(err.message)
       }
     }
-
-    useEffect(()=>{
+    const getTodos = async() =>{
       fetch("http://localhost:8000/todo",{
-          method: "GET"
-      })
-      .then((response)=>{response.json()})
-      .then((result)=> { setItemlist(result.result)
-      })
-       .catch((error)=>{
-        console.log(error)
+        method:"GET"})
+      .then((response)=>response.json())
+      .then((result)=>{
+        setItemlist(result.result)
       })
       .catch((error)=>{
-        console.log({error})
+        console.error({mess:error})
       })
+    }
+
+    useEffect(()=>{
+      getTodos()
    
-    },[itemList])
+      return ()=>{
+        fetch("http://localhost:8000/todo",{
+          method:"DELETE"})
+        .then((response)=>response.json())
+        .then((result)=>{
+            alert("deleted")
+        })
+        .catch((error)=>{
+          console.error({mess:error})
+        })
+      }
+    },[])
 
   return (
     <>
